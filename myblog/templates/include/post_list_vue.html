@@ -1,0 +1,32 @@
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    const PostListApp = {
+        delimiters: ['[[',']]'], //Vue랑 Django 템플릿 충돌 방지
+        data() {
+            return {
+                postList: [] // Post 목록 데이터를 저장할 변수
+            };
+        },
+        created(){
+            console.log("created()...");
+            this.fetchPostList()
+        },
+        methods: {
+            fetchPostList() {
+                axios.get('/api/post/list')
+                .then(res => {
+                    console.log("FETCH POSTLIST GET RES", res);
+                    this.postList = res.data;
+                })
+                .catch(err => {
+                    console.log("FETCH POSTLIST GET ERR.RESPONSE", err.response);
+                    alert(`${err.response.status}${err.response.statusText}`);
+                });
+            },
+
+        },
+    };
+
+Vue.createApp(PostListApp).mount('#page-top')
+</script>
